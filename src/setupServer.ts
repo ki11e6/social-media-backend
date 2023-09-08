@@ -1,11 +1,4 @@
-import {
-  Application,
-  json,
-  urlencoded,
-  Response,
-  Request,
-  NextFunction,
-} from 'express';
+import { Application, json, urlencoded, Response, Request, NextFunction } from 'express';
 import http from 'http';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -47,8 +40,8 @@ export class AppServer {
         name: 'session',
         keys: [config.SECRET_KEY_ONE!, config.SECRET_KEY_TWO!],
         maxAge: 5000,
-        secure: config.NODE_ENV !== 'development',
-      }),
+        secure: config.NODE_ENV !== 'development'
+      })
     );
     app.use(hpp());
     app.use(helmet());
@@ -57,8 +50,8 @@ export class AppServer {
         origin: config.CLIENT_URL,
         credentials: true,
         optionsSuccessStatus: 200,
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-      }),
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+      })
     );
   }
 
@@ -74,25 +67,16 @@ export class AppServer {
 
   private globalErrorHandler(app: Application): void {
     app.all('*', (req: Request, res: Response) => {
-      res
-        .status(HTTP_STATUS.NOT_FOUND)
-        .json({ message: `${req.originalUrl} not found` });
+      res.status(HTTP_STATUS.NOT_FOUND).json({ message: `${req.originalUrl} not found` });
     });
 
-    app.use(
-      (
-        error: IErrorResponse,
-        _req: Request,
-        res: Response,
-        next: NextFunction,
-      ) => {
-        log.error(error);
-        if (error instanceof CustomError) {
-          return res.status(error.statusCode).json(error.serializeErrors());
-        }
-        next();
-      },
-    );
+    app.use((error: IErrorResponse, _req: Request, res: Response, next: NextFunction) => {
+      log.error(error);
+      if (error instanceof CustomError) {
+        return res.status(error.statusCode).json(error.serializeErrors());
+      }
+      next();
+    });
   }
 
   private async startServer(app: Application): Promise<void> {
@@ -111,8 +95,8 @@ export class AppServer {
     const io: Server = new Server(httpServer, {
       cors: {
         origin: config.CLIENT_URL,
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-      },
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+      }
     });
     const pubClient = createClient({ url: config.REDIS_HOST });
     const subClient = pubClient.duplicate();

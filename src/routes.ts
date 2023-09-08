@@ -18,7 +18,7 @@ export default (app: Application) => {
         message: 'User signed up successfully',
         username,
         email,
-        password,
+        password
       });
     });
   };

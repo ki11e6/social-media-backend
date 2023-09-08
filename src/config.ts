@@ -16,8 +16,7 @@ class Config {
   public CLOUD_API_KEY: string | undefined;
   public CLOUD_API_SECRET: string | undefined;
 
-  private readonly DEFAULT_DATABASE_URL =
-    'mongodb://127.0.0.1:27017/social-media-backend';
+  private readonly DEFAULT_DATABASE_URL = 'mongodb://127.0.0.1:27017/social-media-backend';
 
   constructor() {
     this.DATABASE_URL = process.env.DATABASE_URL || this.DEFAULT_DATABASE_URL;
@@ -51,7 +50,7 @@ class Config {
     cloudinary.v2.config({
       cloud_name: this.CLOUD_NAME,
       api_key: this.CLOUD_API_KEY,
-      api_secret: this.CLOUD_API_SECRET,
+      api_secret: this.CLOUD_API_SECRET
     });
   }
 }
