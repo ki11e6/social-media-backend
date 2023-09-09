@@ -19,7 +19,9 @@ export class SignUp {
     if (checkIfUserExist) {
       throw new BadRequestError('Invalid credentials');
     }
+    //_id for auth document
     const authObjectId: ObjectId = new ObjectId();
+    //_id for user document
     const userObjectId: ObjectId = new ObjectId();
     const uId = `${Helpers.generateRandomIntegers(12)}`;
     // the reason we are using SignUp.prototype.signupData and not this.signupData is because
@@ -33,6 +35,7 @@ export class SignUp {
       password,
       avatarColor
     });
+    //public id is set to userId
     const result: UploadApiResponse = (await uploads(avatarImage, `${userObjectId}`, true, true)) as UploadApiResponse;
     if (!result?.public_id) {
       throw new BadRequestError('File upload: Error occurred. Try again.');
