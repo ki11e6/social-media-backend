@@ -1,5 +1,7 @@
 import cloudinary, { UploadApiResponse, UploadApiErrorResponse } from 'cloudinary';
 
+// for user avatar we create custom public key
+//error will be handled when upload is used
 export function uploads(
   file: string,
   public_id?: string,
