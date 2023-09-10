@@ -91,9 +91,9 @@ export class UserCache extends BaseCache {
       if (!this.client.isOpen) {
         await this.client.connect();
       }
-      //creating sorted set with userUid as score
+      //creating sorted set with userUid as score. set is used so we can retrieve multiple
       await this.client.ZADD('user', { score: parseInt(userUId, 10), value: `${key}` });
-      //set the fields and values in hash
+      //set the fields and values in hash.Retrieve only one at a time
       await this.client.HSET(`users:${key}`, dataToSave);
     } catch (error) {
       log.error(error);
