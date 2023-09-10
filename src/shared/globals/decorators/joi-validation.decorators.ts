@@ -14,10 +14,12 @@ export function joiValidation(schema: ObjectSchema): IJoiDecorator {
     //passing (req,res,next)
     descriptor.value = async function (...args: any[]) {
       const req: Request = args[0];
+      // const next: NextFunction = args[2];
       //validate using joi and store error if any in error
       const { error } = await Promise.resolve(schema.validate(req.body));
       if (error?.details) {
         throw new JoiRequestValidationError(error.details[0].message);
+        // return next(new JoiRequestValidationError(error.details[0].message));
       }
       return originalMethod.apply(this, args);
     };
