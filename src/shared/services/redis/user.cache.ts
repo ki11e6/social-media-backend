@@ -14,7 +14,6 @@ export class UserCache extends BaseCache {
 
   public async saveUserToCache(key: string, userUId: string, createdUser: IUserDocument): Promise<void> {
     const createdAt = new Date();
-
     const {
       _id,
       uId,
@@ -36,65 +35,37 @@ export class UserCache extends BaseCache {
       bgImageVersion,
       social
     } = createdUser;
-
-    // list contains pairs of property names and their corresponding values as strings.
-    const firstList: string[] = [
-      '_id',
-      `${_id}`,
-      'uId',
-      `${uId}`,
-      'username',
-      `${username}`,
-      'email',
-      `${email}`,
-      'avatarColor',
-      `${avatarColor}`,
-      'createdAt',
-      `${createdAt}`,
-      'postsCount',
-      `${postsCount}`
-    ];
-    const secondList: string[] = [
-      'blocked',
-      JSON.stringify(blocked),
-      'blockedBy',
-      JSON.stringify(blockedBy),
-      'profilePicture',
-      `${profilePicture}`,
-      'followersCount',
-      `${followersCount}`,
-      'followingCount',
-      `${followingCount}`,
-      'notifications',
-      JSON.stringify(notifications),
-      'social',
-      JSON.stringify(social)
-    ];
-    const thirdList: string[] = [
-      'work',
-      `${work}`,
-      'location',
-      `${location}`,
-      'school',
-      `${school}`,
-      'quote',
-      `${quote}`,
-      'bgImageVersion',
-      `${bgImageVersion}`,
-      'bgImageId',
-      `${bgImageId}`
-    ];
-    const dataToSave: string[] = [...firstList, ...secondList, ...thirdList];
-
+    const dataToSave = {
+      _id: `${_id}`,
+      uId: `${uId}`,
+      username: `${username}`,
+      email: `${email}`,
+      avatarColor: `${avatarColor}`,
+      createdAt: `${createdAt}`,
+      postsCount: `${postsCount}`,
+      blocked: JSON.stringify(blocked),
+      blockedBy: JSON.stringify(blockedBy),
+      profilePicture: `${profilePicture}`,
+      followersCount: `${followersCount}`,
+      followingCount: `${followingCount}`,
+      notifications: JSON.stringify(notifications),
+      social: JSON.stringify(social),
+      work: `${work}`,
+      location: `${location}`,
+      school: `${school}`,
+      quote: `${quote}`,
+      bgImageVersion: `${bgImageVersion}`,
+      bgImageId: `${bgImageId}`
+    };
+    //if connection is not open will create a new connection
     try {
-      //checking connection open inorder to avoid creating another connection
       if (!this.client.isOpen) {
         await this.client.connect();
       }
-      //creating sorted set with userUid as score. set is used so we can retrieve multiple
       await this.client.ZADD('user', { score: parseInt(userUId, 10), value: `${key}` });
-      //set the fields and values in hash.Retrieve only one at a time
-      await this.client.HSET(`users:${key}`, dataToSave);
+      for (const [itemKey, itemValue] of Object.entries(dataToSave)) {
+        await this.client.HSET(`users:${key}`, `${itemKey}`, `${itemValue}`);
+      }
     } catch (error) {
       log.error(error);
       throw new ServerError('Server error. Try again.');
