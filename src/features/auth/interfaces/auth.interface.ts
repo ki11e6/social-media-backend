@@ -1,5 +1,6 @@
 import { Document } from 'mongoose';
 import { ObjectId } from 'mongodb';
+import { IUserDocument } from '@user/interfaces/user.interface';
 
 //creating new property in Request Express,currentUser property
 declare global {
@@ -45,7 +46,7 @@ export interface ISignUpData {
 }
 
 export interface IAuthJob {
-  value?: string | IAuthDocument;
+  value?: string | IAuthDocument | IUserDocument;
 }
 
 // '?' is optional so info like password will not be shared and currentUser? is optional so it will not be available when user not logged in
