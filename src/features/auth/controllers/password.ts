@@ -36,11 +36,8 @@ export class Password {
 
   @joiValidation(passwordSchema)
   public async update(req: Request, res: Response): Promise<void> {
-    const { password, confirmPassword } = req.body;
+    const { password } = req.body;
     const { token } = req.params;
-    if (password !== confirmPassword) {
-      throw new BadRequestError('Passwords do not match');
-    }
     const existingUser: IAuthDocument = await authService.getAuthUserByPasswordToken(token);
     if (!existingUser) {
       throw new BadRequestError('Reset token has expired.');
