@@ -41,7 +41,9 @@ export class SignUp {
       username,
       email,
       password,
-      avatarColor
+      avatarColor,
+      role: 'user',
+      blockedByAdmin: false
     });
     //public id is set to userId
     const result: UploadApiResponse = (await uploads(avatarImage, `${userObjectId}`, true, true)) as UploadApiResponse;
@@ -73,7 +75,9 @@ export class SignUp {
         uId: data.uId,
         email: data.email,
         username: data.username,
-        avatarColor: data.avatarColor
+        avatarColor: data.avatarColor,
+        role: data.role,
+        blockedByAdmin: data.blockedByAdmin
       },
       config.JWT_TOKEN!
     );
@@ -88,6 +92,8 @@ export class SignUp {
       email: Helpers.lowerCase(email),
       password,
       avatarColor,
+      role: 'user',
+      blockedByAdmin: false,
       createdAt: new Date()
     } as IAuthDocument;
   }

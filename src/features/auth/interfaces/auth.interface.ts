@@ -18,6 +18,8 @@ export interface AuthPayload {
   email: string;
   username: string;
   avatarColor: string;
+  role: 'user' | 'admin';
+  blockedByAdmin: boolean;
   iat?: number;
 }
 
@@ -45,6 +47,8 @@ export interface ISignUpData {
   username: string;
   password: string;
   avatarColor: string;
+  role: 'user' | 'admin';
+  blockedByAdmin: boolean;
 }
 
 export interface IAuthJob {

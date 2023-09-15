@@ -31,7 +31,9 @@ export class SignIn {
         uId: existingUser.uId,
         email: existingUser.email,
         username: existingUser.username,
-        avatarColor: existingUser.avatarColor
+        avatarColor: existingUser.avatarColor,
+        role: existingUser.role,
+        blockedByAdmin: existingUser.blockedByAdmin
       },
       config.JWT_TOKEN!
     );
