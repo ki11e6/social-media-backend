@@ -63,7 +63,7 @@ export class PostCache extends BaseCache {
       const postCount: string[] = await this.client.HMGET(`users:${currentUserId}`, 'postsCount');
       //multi is used to ensure complete execution of all commands. redis transactions guarantee atomicity
       const multi: ReturnType<typeof this.client.multi> = this.client.multi();
-
+      //key:postObjectId
       await this.client.ZADD('post', { score: parseInt(uId, 10), value: `${key}` });
       for (const [itemKey, itemValue] of Object.entries(dataToSave)) {
         multi.HSET(`posts:${key}`, `${itemKey}`, `${itemValue}`);
