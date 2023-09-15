@@ -32,6 +32,8 @@ export interface IAuthDocument extends Document {
   createdAt: Date;
   passwordResetToken?: string;
   passwordResetExpires?: number | string;
+  role: 'user' | 'admin';
+  blockedByAdmin: boolean;
   comparePassword(password: string): Promise<boolean>;
   hashPassword(password: string): Promise<string>;
 }
