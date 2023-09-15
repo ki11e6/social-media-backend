@@ -8,10 +8,10 @@ Accept: application/json
 withCredentials: true
 
 {
-  "username": "sharath",
-  "password": "qwerty",
-  "email": "rahul@test.com",
-  "avatarColor": "blue",
+  "username": "admin",
+  "password": "admin123",
+  "email": "admin@example.com",
+  "avatarColor": "gold",
   "avatarImage": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA0gAAAMyAQMAAABtkHM/AAAABlBMVEUAAAD///+l2Z/dAAAAAXRSTlMAQObYZgAAAAFiS0dEAf8CLd4AAABrSURBVBgZ7cGBAAAAAMOg+1NP4AjVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjgBSwwABwrL8wAAAAABJRU5ErkJggg=="
 }
 
@@ -22,8 +22,8 @@ Accept: application/json
 withCredentials: true
 
 {
-  "username": "sharath",
-  "password": "qwerty"
+  "username": "admin",
+  "password": "admin123"
 }
 
 ###
