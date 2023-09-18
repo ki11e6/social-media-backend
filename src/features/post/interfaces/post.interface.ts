@@ -10,7 +10,6 @@ export interface IReactions {
   sad: number;
   angry: number;
 }
-
 export interface IPostDocument extends Document {
   _id?: string | mongoose.Types.ObjectId;
   userId: string;
@@ -23,6 +22,8 @@ export interface IPostDocument extends Document {
   commentsCount: number;
   imgVersion?: string;
   imgId?: string;
+  videoId?: string;
+  videoVersion?: string;
   feelings?: string;
   gifUrl?: string;
   privacy?: string;
@@ -35,6 +36,7 @@ export interface IGetPostsQuery {
   username?: string;
   imgId?: string;
   gifUrl?: string;
+  videoId?: string;
 }
 
 export interface ISavePostToCache {
