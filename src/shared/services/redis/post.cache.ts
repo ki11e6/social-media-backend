@@ -14,7 +14,7 @@ export class PostCache extends BaseCache {
   constructor() {
     super('postCache');
   }
-
+  //save posts to redis
   public async savePostToCache(data: ISavePostToCache): Promise<void> {
     const { key, currentUserId, uId, createdPost } = data;
     const {
@@ -81,7 +81,7 @@ export class PostCache extends BaseCache {
       throw new ServerError('Server error. Try again.');
     }
   }
-
+  //get posts from redis
   public async getPostsFromCache(key: string, start: number, end: number): Promise<IPostDocument[]> {
     try {
       if (!this.client.isOpen) {
@@ -110,7 +110,7 @@ export class PostCache extends BaseCache {
       throw new ServerError('Server error. Try again.');
     }
   }
-
+  //get total number of posts from redis
   public async getTotalPostsInCache(): Promise<number> {
     try {
       if (!this.client.isOpen) {
@@ -123,7 +123,7 @@ export class PostCache extends BaseCache {
       throw new ServerError('Server error. Try again.');
     }
   }
-
+  //get posts with only images from redis
   public async getPostsWithImagesFromCache(key: string, start: number, end: number): Promise<IPostDocument[]> {
     try {
       if (!this.client.isOpen) {
@@ -146,6 +146,45 @@ export class PostCache extends BaseCache {
         }
       }
       return postWithImages;
+    } catch (error) {
+      log.error(error);
+      throw new ServerError('Server error. Try again.');
+    }
+  }
+  //get particular user posts from redis
+  public async getUserPostsFromCache(key: string, uId: number): Promise<IPostDocument[]> {
+    try {
+      if (!this.client.isOpen) {
+        await this.client.connect();
+      }
+
+      const reply: string[] = await this.client.ZRANGE(key, uId, uId, { REV: true, BY: 'SCORE' });
+      const multi: ReturnType<typeof this.client.multi> = this.client.multi();
+      for (const value of reply) {
+        multi.HGETALL(`posts:${value}`);
+      }
+      const replies: PostCacheMultiType = (await multi.exec()) as PostCacheMultiType;
+      const postReplies: IPostDocument[] = [];
+      for (const post of replies as IPostDocument[]) {
+        post.commentsCount = Helpers.parseJson(`${post.commentsCount}`) as number;
+        post.reactions = Helpers.parseJson(`${post.reactions}`) as IReactions;
+        post.createdAt = new Date(Helpers.parseJson(`${post.createdAt}`)) as Date;
+        postReplies.push(post);
+      }
+      return postReplies;
+    } catch (error) {
+      log.error(error);
+      throw new ServerError('Server error. Try again.');
+    }
+  }
+  //get total number of posts of particular user from redis
+  public async getTotalUserPostsInCache(uId: number): Promise<number> {
+    try {
+      if (!this.client.isOpen) {
+        await this.client.connect();
+      }
+      const count: number = await this.client.ZCOUNT('post', uId, uId);
+      return count;
     } catch (error) {
       log.error(error);
       throw new ServerError('Server error. Try again.');
