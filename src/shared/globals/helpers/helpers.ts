@@ -1,5 +1,4 @@
 export class Helpers {
-  //this will convert the string first letter to UpperCase
   static firstLetterUppercase(str: string): string {
     const valueString = str.toLowerCase();
     return valueString
@@ -30,5 +29,22 @@ export class Helpers {
       return prop;
     }
     return JSON.parse(prop);
+  }
+
+  static isDataURL(value: string): boolean {
+    const dataUrlRegex = /^\s*data:([a-z]+\/[a-z0-9-+.]+(;[a-z-]+=[a-z0-9-]+)?)?(;base64)?,([a-z0-9!$&',()*+;=\-._~:@\\/?%\s]*)\s*$/i;
+    return dataUrlRegex.test(value);
+  }
+
+  static shuffle(list: string[]): string[] {
+    for (let i = list.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [list[i], list[j]] = [list[j], list[i]];
+    }
+    return list;
+  }
+
+  static escapeRegex(text: string): string {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
   }
 }
