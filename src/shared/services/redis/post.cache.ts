@@ -63,15 +63,18 @@ export class PostCache extends BaseCache {
       if (!this.client.isOpen) {
         await this.client.connect();
       }
-
+      //fetch postcount using user id.
       const postCount: string[] = await this.client.HMGET(`users:${currentUserId}`, 'postsCount');
+      //multi is used to ensure complete execution of all commands. redis transactions guarantee atomicity
       const multi: ReturnType<typeof this.client.multi> = this.client.multi();
+      //key:postObjectId
       await this.client.ZADD('post', { score: parseInt(uId, 10), value: `${key}` });
       for (const [itemKey, itemValue] of Object.entries(dataToSave)) {
         multi.HSET(`posts:${key}`, `${itemKey}`, `${itemValue}`);
       }
       const count: number = parseInt(postCount[0], 10) + 1;
       multi.HSET(`users:${currentUserId}`, 'postsCount', count);
+      //execute all the queued commands as a single transaction.
       multi.exec();
     } catch (error) {
       log.error(error);
@@ -180,6 +183,24 @@ export class PostCache extends BaseCache {
       }
       const count: number = await this.client.ZCOUNT('post', uId, uId);
       return count;
+    } catch (error) {
+      log.error(error);
+      throw new ServerError('Server error. Try again.');
+    }
+  }
+
+  public async deletePostFromCache(key: string, currentUserId: string): Promise<void> {
+    try {
+      if (!this.client.isOpen) {
+        await this.client.connect();
+      }
+      const postCount: string[] = await this.client.HMGET(`users:${currentUserId}`, 'postsCount');
+      const multi: ReturnType<typeof this.client.multi> = this.client.multi();
+      multi.ZREM('post', `${key}`);
+      multi.DEL(`posts:${key}`);
+      const count: number = parseInt(postCount[0], 10) - 1;
+      multi.HSET(`users:${currentUserId}`, 'postsCount', count);
+      await multi.exec();
     } catch (error) {
       log.error(error);
       throw new ServerError('Server error. Try again.');
