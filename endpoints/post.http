@@ -8,7 +8,7 @@ Accept: application/json
 withCredentials: true
 
 {
-  "post": "This is my tenth post",
+  "post": "This is my test3 post",
   "bgColor": "black",
   "privacy": "Public",
   "gifUrl": "",
@@ -23,7 +23,7 @@ Accept: application/json
 withCredentials: true
 
 {
-  "post": "This is my first post",
+  "post": "This is my second image post",
   "bgColor": "",
   "privacy": "",
   "gifUrl": "",
@@ -40,6 +40,12 @@ withCredentials: true
 
 ###
 GET {{baseUrl}}/{{urlPath}}/post/images/1
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
+
+###
+DELETE  {{baseUrl}}/{{urlPath}}/post/650c12e75e5eb7a423f5560b
 Content-Type: application/json
 Accept: application/json
 withCredentials: true

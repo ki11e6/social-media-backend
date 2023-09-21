@@ -198,6 +198,8 @@ export class PostCache extends BaseCache {
       const multi: ReturnType<typeof this.client.multi> = this.client.multi();
       multi.ZREM('post', `${key}`);
       multi.DEL(`posts:${key}`);
+      multi.DEL(`comments:${key}`);
+      multi.DEL(`reactions:${key}`);
       const count: number = parseInt(postCount[0], 10) - 1;
       multi.HSET(`users:${currentUserId}`, 'postsCount', count);
       await multi.exec();
