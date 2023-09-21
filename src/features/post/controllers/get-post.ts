@@ -5,28 +5,21 @@ import { PostCache } from '@service/redis/post.cache';
 import { postService } from '@service/db/post.service';
 
 const postCache: PostCache = new PostCache();
-//page content size
 const PAGE_SIZE = 10;
 
 export class Get {
   public async posts(req: Request, res: Response): Promise<void> {
     const { page } = req.params;
-    //page 1, skip =0. page 2, skip =10
     const skip: number = (parseInt(page) - 1) * PAGE_SIZE;
-    //page 1, contents =10, page 2, contents =20
     const limit: number = PAGE_SIZE * parseInt(page);
-    //skip for redis. newSkip is inclusive
     const newSkip: number = skip === 0 ? skip : skip + 1;
     let posts: IPostDocument[] = [];
     let totalPosts = 0;
     const cachedPosts: IPostDocument[] = await postCache.getPostsFromCache('post', newSkip, limit);
     if (cachedPosts.length) {
-      //this will work if cache exists
       posts = cachedPosts;
       totalPosts = await postCache.getTotalPostsInCache();
     } else {
-      //if cache doesn't exist
-      // will return recently created posts
       posts = await postService.getPosts({}, skip, limit, { createdAt: -1 });
       totalPosts = await postService.postsCount();
     }

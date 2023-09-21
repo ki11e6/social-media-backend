@@ -14,7 +14,7 @@ export class PostCache extends BaseCache {
   constructor() {
     super('postCache');
   }
-  //save posts to redis
+
   public async savePostToCache(data: ISavePostToCache): Promise<void> {
     const { key, currentUserId, uId, createdPost } = data;
     const {
@@ -63,38 +63,33 @@ export class PostCache extends BaseCache {
       if (!this.client.isOpen) {
         await this.client.connect();
       }
-      //fetch postcount using user id.
+
       const postCount: string[] = await this.client.HMGET(`users:${currentUserId}`, 'postsCount');
-      //multi is used to ensure complete execution of all commands. redis transactions guarantee atomicity
       const multi: ReturnType<typeof this.client.multi> = this.client.multi();
-      //key:postObjectId
       await this.client.ZADD('post', { score: parseInt(uId, 10), value: `${key}` });
       for (const [itemKey, itemValue] of Object.entries(dataToSave)) {
         multi.HSET(`posts:${key}`, `${itemKey}`, `${itemValue}`);
       }
       const count: number = parseInt(postCount[0], 10) + 1;
       multi.HSET(`users:${currentUserId}`, 'postsCount', count);
-      //execute all the queued commands as a single transaction.
       multi.exec();
     } catch (error) {
       log.error(error);
       throw new ServerError('Server error. Try again.');
     }
   }
-  //get posts from redis
+
   public async getPostsFromCache(key: string, start: number, end: number): Promise<IPostDocument[]> {
     try {
       if (!this.client.isOpen) {
         await this.client.connect();
       }
-      //to get the latest post REV: true
-      //key is 'post'
+
       const reply: string[] = await this.client.ZRANGE(key, start, end, { REV: true });
       const multi: ReturnType<typeof this.client.multi> = this.client.multi();
       for (const value of reply) {
         multi.HGETALL(`posts:${value}`);
       }
-      //replies return RedisCommnadRawReply[]
       const replies: PostCacheMultiType = (await multi.exec()) as PostCacheMultiType;
       const postReplies: IPostDocument[] = [];
       for (const post of replies as IPostDocument[]) {
@@ -110,7 +105,7 @@ export class PostCache extends BaseCache {
       throw new ServerError('Server error. Try again.');
     }
   }
-  //get total number of posts from redis
+
   public async getTotalPostsInCache(): Promise<number> {
     try {
       if (!this.client.isOpen) {
@@ -123,7 +118,7 @@ export class PostCache extends BaseCache {
       throw new ServerError('Server error. Try again.');
     }
   }
-  //get posts with only images from redis
+
   public async getPostsWithImagesFromCache(key: string, start: number, end: number): Promise<IPostDocument[]> {
     try {
       if (!this.client.isOpen) {
@@ -151,7 +146,7 @@ export class PostCache extends BaseCache {
       throw new ServerError('Server error. Try again.');
     }
   }
-  //get particular user posts from redis
+
   public async getUserPostsFromCache(key: string, uId: number): Promise<IPostDocument[]> {
     try {
       if (!this.client.isOpen) {
@@ -177,7 +172,7 @@ export class PostCache extends BaseCache {
       throw new ServerError('Server error. Try again.');
     }
   }
-  //get total number of posts of particular user from redis
+
   public async getTotalUserPostsInCache(uId: number): Promise<number> {
     try {
       if (!this.client.isOpen) {

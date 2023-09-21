@@ -14,7 +14,7 @@ import { UserCache } from '@service/redis/user.cache';
 import { config } from '@root/config';
 import { authQueue } from '@service/queues/auth.queue';
 import { userQueue } from '@service/queues/user.queue';
-import JWT from 'jsonwebtoken';
+// import JWT from 'jsonwebtoken';
 
 const userCache: UserCache = new UserCache();
 
@@ -61,27 +61,27 @@ export class SignUp {
     userQueue.addUserJob('addUserToDB', { value: userDataForCache });
 
     //token creation
-    const userJwt: string = SignUp.prototype.signToken(authData, userObjectId);
+    // const userJwt: string = SignUp.prototype.signToken(authData, userObjectId);
     //save to session
-    req.session = { jwt: userJwt };
+    // req.session = { jwt: userJwt };
     //response sent
-    res.status(HTTP_STATUS.CREATED).json({ message: 'User created successfully', user: userDataForCache, token: userJwt });
+    res.status(HTTP_STATUS.CREATED).json({ message: 'User created successfully', user: userDataForCache });
   }
 
-  private signToken(data: IAuthDocument, userObjectId: ObjectId): string {
-    return JWT.sign(
-      {
-        userId: userObjectId,
-        uId: data.uId,
-        email: data.email,
-        username: data.username,
-        avatarColor: data.avatarColor,
-        role: data.role,
-        blockedByAdmin: data.blockedByAdmin
-      },
-      config.JWT_TOKEN!
-    );
-  }
+  // private signToken(data: IAuthDocument, userObjectId: ObjectId): string {
+  //   return JWT.sign(
+  //     {
+  //       userId: userObjectId,
+  //       uId: data.uId,
+  //       email: data.email,
+  //       username: data.username,
+  //       avatarColor: data.avatarColor,
+  //       role: data.role,
+  //       blockedByAdmin: data.blockedByAdmin
+  //     },
+  //     config.JWT_TOKEN!
+  //   );
+  // }
 
   private signupData(data: ISignUpData): IAuthDocument {
     const { _id, username, email, uId, password, avatarColor } = data;
