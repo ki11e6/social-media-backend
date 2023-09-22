@@ -14,7 +14,7 @@ export class PostCache extends BaseCache {
   constructor() {
     super('postCache');
   }
-
+  //save posts to cache
   public async savePostToCache(data: ISavePostToCache): Promise<void> {
     const { key, currentUserId, uId, createdPost } = data;
     const {
@@ -81,7 +81,7 @@ export class PostCache extends BaseCache {
       throw new ServerError('Server error. Try again.');
     }
   }
-
+  //get posts from cache
   public async getPostsFromCache(key: string, start: number, end: number): Promise<IPostDocument[]> {
     try {
       if (!this.client.isOpen) {
@@ -108,7 +108,7 @@ export class PostCache extends BaseCache {
       throw new ServerError('Server error. Try again.');
     }
   }
-
+  //get total number of posts in cache
   public async getTotalPostsInCache(): Promise<number> {
     try {
       if (!this.client.isOpen) {
@@ -121,7 +121,7 @@ export class PostCache extends BaseCache {
       throw new ServerError('Server error. Try again.');
     }
   }
-
+  //get all posts with images from cache
   public async getPostsWithImagesFromCache(key: string, start: number, end: number): Promise<IPostDocument[]> {
     try {
       if (!this.client.isOpen) {
@@ -149,7 +149,7 @@ export class PostCache extends BaseCache {
       throw new ServerError('Server error. Try again.');
     }
   }
-
+  //get posts by user from cache
   public async getUserPostsFromCache(key: string, uId: number): Promise<IPostDocument[]> {
     try {
       if (!this.client.isOpen) {
@@ -175,7 +175,7 @@ export class PostCache extends BaseCache {
       throw new ServerError('Server error. Try again.');
     }
   }
-
+  //get total number of posts by user
   public async getTotalUserPostsInCache(uId: number): Promise<number> {
     try {
       if (!this.client.isOpen) {
@@ -188,7 +188,7 @@ export class PostCache extends BaseCache {
       throw new ServerError('Server error. Try again.');
     }
   }
-
+  //delete post with postId from cache
   public async deletePostFromCache(key: string, currentUserId: string): Promise<void> {
     try {
       if (!this.client.isOpen) {
@@ -203,6 +203,43 @@ export class PostCache extends BaseCache {
       const count: number = parseInt(postCount[0], 10) - 1;
       multi.HSET(`users:${currentUserId}`, 'postsCount', count);
       await multi.exec();
+    } catch (error) {
+      log.error(error);
+      throw new ServerError('Server error. Try again.');
+    }
+  }
+  //update all changes to the post into cache
+  public async updatePostInCache(key: string, updatedPost: IPostDocument): Promise<IPostDocument> {
+    const { post, bgColor, feelings, privacy, gifUrl, imgVersion, imgId, videoId, videoVersion, profilePicture } = updatedPost;
+    const dataToSave = {
+      post: `${post}`,
+      bgColor: `${bgColor}`,
+      feelings: `${feelings}`,
+      privacy: `${privacy}`,
+      gifUrl: `${gifUrl}`,
+      videoId: `${videoId}`,
+      videoVersion: `${videoVersion}`,
+      profilePicture: `${profilePicture}`,
+      imgVersion: `${imgVersion}`,
+      imgId: `${imgId}`
+    };
+
+    try {
+      if (!this.client.isOpen) {
+        await this.client.connect();
+      }
+      for (const [itemKey, itemValue] of Object.entries(dataToSave)) {
+        await this.client.HSET(`posts:${key}`, `${itemKey}`, `${itemValue}`);
+      }
+      const multi: ReturnType<typeof this.client.multi> = this.client.multi();
+      multi.HGETALL(`posts:${key}`);
+      const reply: PostCacheMultiType = (await multi.exec()) as PostCacheMultiType;
+      const postReply = reply as IPostDocument[];
+      postReply[0].commentsCount = Helpers.parseJson(`${postReply[0].commentsCount}`) as number;
+      postReply[0].reactions = Helpers.parseJson(`${postReply[0].reactions}`) as IReactions;
+      postReply[0].createdAt = new Date(Helpers.parseJson(`${postReply[0].createdAt}`)) as Date;
+
+      return postReply[0];
     } catch (error) {
       log.error(error);
       throw new ServerError('Server error. Try again.');
