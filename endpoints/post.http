@@ -23,7 +23,7 @@ Accept: application/json
 withCredentials: true
 
 {
-  "post": "This is my second image post",
+  "post": "This is image post test 1",
   "bgColor": "",
   "privacy": "",
   "gifUrl": "",
@@ -51,18 +51,35 @@ Accept: application/json
 withCredentials: true
 
 ###
-PUT {{baseUrl}}/{{urlPath}}/post/650d52178630062ab862bd54
+PUT {{baseUrl}}/{{urlPath}}/post/650d52e061fd191454ab3e7a
 Content-Type: application/json
 Accept: application/json
 withCredentials: true,
 
 {
-  "post": "post is updated",
-  "bgColor": "red",
-  "privacy": "Public",
+  "post": "post is updated 2",
+  "bgColor": "pink",
+  "privacy": "private",
   "gifUrl": "",
   "profilePicture": "https://res.cloudinary.com/dyamr9ym3/image/upload/v1659189696/62e539c0d8b514f6e42e3b5b",
   "feelings": "sad",
+  "imgId": "",
+  "imgVersion": ""
+}
+
+###
+PUT {{baseUrl}}/{{urlPath}}/post/image/650d52e061fd1918884ab3e7a
+Content-Type: application/json
+Accept: application/json
+withCredentials: true,
+
+{
+  "post": "post with image is updated test1",
+  "bgColor": "blue",
+  "privacy": "private",
+  "gifUrl": "",
+  "profilePicture": "https://res.cloudinary.com/dyamr9ym3/image/upload/v1659189696/62e539c0d8b514f6e42e3b5b",
+  "feelings": "fun",
   "imgId": "",
   "imgVersion": "",
   "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA0gAAAMyAQMAAABtkHM/AAAABlBMVEUAAAD///+l2Z/dAAAAAXRSTlMAQObYZgAAAAFiS0dEAf8CLd4AAABrSURBVBgZ7cGBAAAAAMOg+1NP4AjVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjgBSwwABwrL8wAAAAABJRU5ErkJggg=="
