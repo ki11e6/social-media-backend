@@ -45,13 +45,13 @@ Accept: application/json
 withCredentials: true
 
 ###
-DELETE  {{baseUrl}}/{{urlPath}}/post/650d52308630062ab862bd60
+DELETE  {{baseUrl}}/{{urlPath}}/post/650dd140a537d299ebde3489
 Content-Type: application/json
 Accept: application/json
 withCredentials: true
 
 ###
-PUT {{baseUrl}}/{{urlPath}}/post/650d52e061fd191454ab3e7a
+PUT {{baseUrl}}/{{urlPath}}/post/650dd140a537d299ebde3489
 Content-Type: application/json
 Accept: application/json
 withCredentials: true,
@@ -68,7 +68,7 @@ withCredentials: true,
 }
 
 ###
-PUT {{baseUrl}}/{{urlPath}}/post/image/650d52e061fd1918884ab3e7a
+PUT {{baseUrl}}/{{urlPath}}/post/image/650dd13ea537d299ebde3485
 Content-Type: application/json
 Accept: application/json
 withCredentials: true,
