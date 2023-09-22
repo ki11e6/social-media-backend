@@ -21,7 +21,7 @@ export class PostAuthMiddleware {
       throw new NotFoundError('Post not found');
     } else if (postUser !== curUser) {
       // Check if the authenticated user is the owner of the post
-      throw new NotAuthorizedError('You are not authorized to delete this post.');
+      throw new NotAuthorizedError('You are not authorized to modify this post.');
     }
 
     next();
