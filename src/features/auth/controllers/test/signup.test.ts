@@ -202,11 +202,9 @@ describe('SignUp', () => {
     jest.spyOn(cloudinaryUploads, 'uploads').mockImplementation((): any => Promise.resolve({ version: '1234737373', public_id: '123456' }));
 
     await SignUp.prototype.create(req, res);
-    expect(req.session?.jwt).toBeDefined();
     expect(res.json).toHaveBeenCalledWith({
       message: 'User created successfully',
-      user: userSpy.mock.calls[0][2],
-      token: req.session?.jwt
+      user: userSpy.mock.calls[0][2]
     });
   });
 });

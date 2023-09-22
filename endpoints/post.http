@@ -8,7 +8,7 @@ Accept: application/json
 withCredentials: true
 
 {
-  "post": "This is my test3 post",
+  "post": "This is my test2 post",
   "bgColor": "black",
   "privacy": "Public",
   "gifUrl": "",
@@ -45,7 +45,7 @@ Accept: application/json
 withCredentials: true
 
 ###
-DELETE  {{baseUrl}}/{{urlPath}}/post/650c12e75e5eb7a423f5560b
+DELETE  {{baseUrl}}/{{urlPath}}/post/650d52308630062ab862bd60
 Content-Type: application/json
 Accept: application/json
 withCredentials: true

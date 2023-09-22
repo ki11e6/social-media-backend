@@ -40,7 +40,7 @@ export class AppServer {
       cookieSession({
         name: 'session',
         keys: [config.SECRET_KEY_ONE!, config.SECRET_KEY_TWO!],
-        maxAge: 7 * 24 * 60 * 60 * 1000,
+        maxAge: 24 * 60 * 60 * 1000, //24hrs
         secure: config.NODE_ENV !== 'development'
       })
     );

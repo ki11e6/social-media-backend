@@ -20,7 +20,6 @@ class AuthRoutes {
   }
   public signoutRoute(): Router {
     this.router.get('/signout', SignOut.prototype.update);
-
     return this.router;
   }
 }

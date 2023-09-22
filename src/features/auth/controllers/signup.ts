@@ -8,13 +8,13 @@ import { Helpers } from '@global/helpers/helpers';
 import { UploadApiResponse } from 'cloudinary';
 import { uploads } from '@global/helpers/cloudinary-upload';
 import HTTP_STATUS from 'http-status-codes';
-import { BadRequestError } from '@global/helpers/error-handler';
 import { IUserDocument } from '@user/interfaces/user.interface';
 import { UserCache } from '@service/redis/user.cache';
-import { config } from '@root/config';
 import { authQueue } from '@service/queues/auth.queue';
 import { userQueue } from '@service/queues/user.queue';
-import JWT from 'jsonwebtoken';
+import { config } from '@root/config';
+import { BadRequestError } from '@global/helpers/error-handler';
+// import JWT from 'jsonwebtoken';
 
 const userCache: UserCache = new UserCache();
 
@@ -22,14 +22,12 @@ export class SignUp {
   @joiValidation(signupSchema)
   public async create(req: Request, res: Response): Promise<void> {
     const { username, email, password, avatarColor, avatarImage } = req.body;
-    //check if above info is already exists
     const checkIfUserExist: IAuthDocument = await authService.getUserByUsernameOrEmail(username, email);
     if (checkIfUserExist) {
       throw new BadRequestError('Invalid credentials');
     }
-    //_id for auth document
+
     const authObjectId: ObjectId = new ObjectId();
-    //_id for user document
     const userObjectId: ObjectId = new ObjectId();
     const uId = `${Helpers.generateRandomIntegers(12)}`;
     // the reason we are using SignUp.prototype.signupData and not this.signupData is because
@@ -45,7 +43,6 @@ export class SignUp {
       role: 'user',
       blockedByAdmin: false
     });
-    //public id is set to userId
     const result: UploadApiResponse = (await uploads(avatarImage, `${userObjectId}`, true, true)) as UploadApiResponse;
     if (!result?.public_id) {
       throw new BadRequestError('File upload: Error occurred. Try again.');
@@ -60,28 +57,26 @@ export class SignUp {
     authQueue.addAuthUserJob('addAuthUserToDB', { value: authData });
     userQueue.addUserJob('addUserToDB', { value: userDataForCache });
 
-    // token creation
-    const userJwt: string = SignUp.prototype.signToken(authData, userObjectId);
-    // save to session
-    req.session = { jwt: userJwt };
-    // response sent
-    res.status(HTTP_STATUS.CREATED).json({ message: 'User created successfully', user: userDataForCache, token: userJwt });
+    // const userJwt: string = SignUp.prototype.signToken(authData, userObjectId);
+    // req.session = { jwt: userJwt };
+    res.status(HTTP_STATUS.CREATED).json({ message: 'User created successfully', user: userDataForCache });
+    // res.status(HTTP_STATUS.CREATED).json({ message: 'User created successfully', user: userDataForCache, token: userJwt });
   }
 
-  private signToken(data: IAuthDocument, userObjectId: ObjectId): string {
-    return JWT.sign(
-      {
-        userId: userObjectId,
-        uId: data.uId,
-        email: data.email,
-        username: data.username,
-        avatarColor: data.avatarColor,
-        role: data.role,
-        blockedByAdmin: data.blockedByAdmin
-      },
-      config.JWT_TOKEN!
-    );
-  }
+  // private signToken(data: IAuthDocument, userObjectId: ObjectId): string {
+  //   return JWT.sign(
+  //     {
+  //       userId: userObjectId,
+  //       uId: data.uId,
+  //       email: data.email,
+  //       username: data.username,
+  //       avatarColor: data.avatarColor,
+  //       role: data.role,
+  //       blockedByAdmin: data.blockedByAdmin
+  //     },
+  //     config.JWT_TOKEN!
+  //   );
+  // }
 
   private signupData(data: ISignUpData): IAuthDocument {
     const { _id, username, email, uId, password, avatarColor } = data;
@@ -97,6 +92,7 @@ export class SignUp {
       createdAt: new Date()
     } as IAuthDocument;
   }
+
   private userData(data: IAuthDocument, userObjectId: ObjectId): IUserDocument {
     const { _id, username, email, uId, password, avatarColor } = data;
     return {
