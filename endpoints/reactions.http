@@ -10,9 +10,9 @@ withCredentials: true
 {
   "userTo": "65104ecb799af352f7760ac8",
   "postId": "65104f17799af352f7760acf",
-  "type": "happy",
+  "type": "angry",
   "previousReaction": "",
-  "postReactions": {"like": 0,"love": 0,"happy": 1,"sad": 0,"wow": 0,"angry": 0},
+  "postReactions": {"like": 0,"love": 0,"happy": 0,"sad": 0,"wow": 0,"angry": 1},
   "profilePicture": "https://res.cloudinary.com/dyamr9ym3/image/upload/v1659189696/62e539c0d8b514f6e42e3b5b"
 }
 
@@ -22,4 +22,20 @@ Content-Type: application/json
 Accept: application/json
 withCredentials: true
 
+### get all the reactions of a post with post id.
+GET {{baseUrl}}/{{urlPath}}/post/reactions/65104f17799af352f7760acf
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
 
+### get a reaction of one user in a post with post id.
+GET {{baseUrl}}/{{urlPath}}/post/single/reaction/username/achu/65104f17799af352f7760acf
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
+
+### get all reactions of a user.
+GET {{baseUrl}}/{{urlPath}}/post/reactions/username/achu
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
