@@ -74,6 +74,28 @@ export class ReactionCache extends BaseCache {
     });
   }
 
+  public async getReactionsFromCache(postId: string): Promise<[IReactionDocument[], number]> {
+    try {
+      if (!this.client.isOpen) {
+        await this.client.connect();
+      }
+      //get the count of reactions ,LLEN - lenght of list.
+      const reactionsCount: number = await this.client.LLEN(`reactions:${postId}`);
+      //get all reactions
+      const response: string[] = await this.client.LRANGE(`reactions:${postId}`, 0, -1);
+      const list: IReactionDocument[] = [];
+      //convert string to json.
+      for (const item of response) {
+        list.push(Helpers.parseJson(item));
+      }
+      //if response has length greater than zero
+      return response.length ? [list, reactionsCount] : [[], 0];
+    } catch (error) {
+      log.error(error);
+      throw new ServerError('Server error. Try again.');
+    }
+  }
+
   public async getSingleReactionByUsernameFromCache(postId: string, username: string): Promise<[IReactionDocument, number] | []> {
     try {
       if (!this.client.isOpen) {

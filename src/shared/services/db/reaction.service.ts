@@ -51,7 +51,7 @@ class ReactionService {
       )
     ]);
   }
-
+  //Reord Utility Type used for object types.
   public async getPostReactions(query: IQueryReaction, sort: Record<string, 1 | -1>): Promise<[IReactionDocument[], number]> {
     const reactions: IReactionDocument[] = await ReactionModel.aggregate([{ $match: query }, { $sort: sort }]);
     return [reactions, reactions.length];
