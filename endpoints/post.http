@@ -1,14 +1,14 @@
 @baseUrl = http://localhost:5000
 @urlPath = api/v1
 
-###
+### create a new Post
 POST {{baseUrl}}/{{urlPath}}/post
 Content-Type: application/json
 Accept: application/json
 withCredentials: true
 
 {
-  "post": "This is my test2 post",
+  "post": "This is my test #1 post",
   "bgColor": "black",
   "privacy": "Public",
   "gifUrl": "",
@@ -16,48 +16,48 @@ withCredentials: true
   "feelings": ""
 }
 
-###
+### create a new Post with Image
 POST {{baseUrl}}/{{urlPath}}/post/image/post
 Content-Type: application/json
 Accept: application/json
 withCredentials: true
 
 {
-  "post": "This is image post test 1",
-  "bgColor": "",
-  "privacy": "",
+  "post": "This is test #1 post with image  ",
+  "bgColor": "blue",
+  "privacy": "public",
   "gifUrl": "",
-  "profilePicture": "",
-  "feelings": "",
+  "profilePicture": "https://res.cloudinary.com/dyamr9ym3/image/upload/v1659189696/62e539c0d8b514f6e42e3b5b",
+  "feelings": "happy",
   "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA0gAAAMyAQMAAABtkHM/AAAABlBMVEUAAAD///+l2Z/dAAAAAXRSTlMAQObYZgAAAAFiS0dEAf8CLd4AAABrSURBVBgZ7cGBAAAAAMOg+1NP4AjVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjgBSwwABwrL8wAAAAABJRU5ErkJggg=="
 }
 
-###
+### list all Posts
 GET {{baseUrl}}/{{urlPath}}/post/all/1
 Content-Type: application/json
 Accept: application/json
 withCredentials: true
 
-###
+### list only Posts with Images
 GET {{baseUrl}}/{{urlPath}}/post/images/1
 Content-Type: application/json
 Accept: application/json
 withCredentials: true
 
-###
-DELETE  {{baseUrl}}/{{urlPath}}/post/650dd140a537d299ebde3489
+### delete a Post with Post ID
+DELETE  {{baseUrl}}/{{urlPath}}/post/651049a8016f9562fc131482
 Content-Type: application/json
 Accept: application/json
 withCredentials: true
 
-###
-PUT {{baseUrl}}/{{urlPath}}/post/650dd140a537d299ebde3489
+### update a Post with Post ID
+PUT {{baseUrl}}/{{urlPath}}/post/-
 Content-Type: application/json
 Accept: application/json
 withCredentials: true,
 
 {
-  "post": "post is updated 2",
+  "post": "Post Updated #1",
   "bgColor": "pink",
   "privacy": "private",
   "gifUrl": "",
@@ -67,7 +67,7 @@ withCredentials: true,
   "imgVersion": ""
 }
 
-###
+### update a Post that has Image with Post ID
 PUT {{baseUrl}}/{{urlPath}}/post/image/650dd13ea537d299ebde3485
 Content-Type: application/json
 Accept: application/json

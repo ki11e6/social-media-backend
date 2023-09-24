@@ -24,11 +24,12 @@ export class Helpers {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static parseJson(prop: string): any {
     try {
-      JSON.parse(prop);
+      const parsedJson = JSON.parse(prop);
+      // If parsing is successful, return the parsed JSON object
+      return parsedJson;
     } catch (error) {
       return prop;
     }
-    return JSON.parse(prop);
   }
 
   static isDataURL(value: string): boolean {

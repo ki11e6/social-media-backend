@@ -1,21 +1,21 @@
 @baseUrl = http://localhost:5000
 @urlPath = api/v1
 
-###
+### create a new User
 POST {{baseUrl}}/{{urlPath}}/signup
 Content-Type: application/json
 Accept: application/json
 withCredentials: true
 
 {
-  "username": "achu",
+  "username": "sharath",
   "password": "12345678",
-  "email": "achu@example.com",
+  "email": "sharath@example.com",
   "avatarColor": "white",
   "avatarImage": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA0gAAAMyAQMAAABtkHM/AAAABlBMVEUAAAD///+l2Z/dAAAAAXRSTlMAQObYZgAAAAFiS0dEAf8CLd4AAABrSURBVBgZ7cGBAAAAAMOg+1NP4AjVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjgBSwwABwrL8wAAAAABJRU5ErkJggg=="
 }
 
-###
+### sign in a with existing User
 POST {{baseUrl}}/{{urlPath}}/signin
 Content-Type: application/json
 Accept: application/json
@@ -26,19 +26,19 @@ withCredentials: true
   "password": "12345678"
 }
 
-###
+### sign out User
 GET {{baseUrl}}/{{urlPath}}/signout
 Content-Type: application/json
 Accept: application/json
 withCredentials: true
 
-###
+### check Current User
 GET {{baseUrl}}/{{urlPath}}/currentuser
 Content-Type: application/json
 Accept: application/json
 withCredentials: true
 
-###
+### request for reset password
 POST {{baseUrl}}/{{urlPath}}/forgot-password
 Content-Type: application/json
 Accept: application/json
@@ -48,7 +48,7 @@ withCredentials: true
   "email": "sharath@test.com"
 }
 
-###
+### update password with token.
 POST {{baseUrl}}/{{urlPath}}/reset-password/9715b19080632b4d632d696f7599cb8ebc35d106
 Content-Type: application/json
 Accept: application/json

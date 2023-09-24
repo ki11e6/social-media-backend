@@ -17,11 +17,7 @@ export class PostAuthMiddleware {
     } catch (error) {
       throw new NotFoundError('Post not found');
     }
-    const postUser = JSON.stringify(post?.userId);
-    const curUser = JSON.stringify(userId);
-    console.log(curUser);
-    console.log(postUser);
-    if (postUser !== curUser) {
+    if (post?.userId.toString() !== userId) {
       // Check if the authenticated user is the owner of the post
       throw new NotAuthorizedError('You are not authorized to modify this post.');
     }
