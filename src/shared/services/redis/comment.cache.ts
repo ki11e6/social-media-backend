@@ -108,23 +108,21 @@ export class CommentCache extends BaseCache {
       if (!result) {
         throw new NotFoundError('Comment not found');
       }
-
-      if (result.username === username) {
-        const multi: ReturnType<typeof this.client.multi> = this.client.multi();
-        multi.LREM(`comments:${postId}`, 1, JSON.stringify(result));
-        await multi.exec();
-        const commentsCount: string[] = await this.client.HMGET(`posts:${postId}`, 'commentsCount');
-        let count: number = Helpers.parseJson(commentsCount[0]) as number;
-        count -= 1;
-        //update commentsCount in post.
-        await this.client.HSET(`posts:${postId}`, 'commentsCount', `${count}`);
-      } else {
+      //this will check if the current logged in user is trying to delete the comment.
+      if (result.username !== username) {
         throw new NotAuthorizedError('User is not the author of this comment');
       }
+      const multi: ReturnType<typeof this.client.multi> = this.client.multi();
+      multi.LREM(`comments:${postId}`, 1, JSON.stringify(result));
+      await multi.exec();
+      const commentsCount: string[] = await this.client.HMGET(`posts:${postId}`, 'commentsCount');
+      let count: number = Helpers.parseJson(commentsCount[0]) as number;
+      count -= 1;
+      //update commentsCount in post.
+      await this.client.HSET(`posts:${postId}`, 'commentsCount', `${count}`);
     } catch (error) {
       if (error instanceof NotAuthorizedError || error instanceof NotFoundError) {
         // Handle the UnauthorizedError here if needed
-        log.error('Error:', error);
         throw error;
       } else {
         // Handle other errors here

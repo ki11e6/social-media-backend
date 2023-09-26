@@ -8,7 +8,7 @@ Accept: application/json
 withCredentials: true
 
 {
-  "post": "This is my test #3 post",
+  "post": "This is post with comment #2",
   "bgColor": "black",
   "privacy": "Public",
   "gifUrl": "",

@@ -1,7 +1,7 @@
 @baseUrl = http://localhost:5000
 @urlPath = api/v1
 
-###
+### add comment.
 POST {{baseUrl}}/{{urlPath}}/post/comment
 Content-Type: application/json
 Accept: application/json
@@ -10,18 +10,30 @@ withCredentials: true
 {
   "userTo": "65104ecb799af352f7760ac8",
   "postId": "65104f17799af352f7760acf",
-  "comment": "This is my second comment",
+  "comment": "This is manny first comment",
   "profilePicture": "https://res.cloudinary.com/dyamr9ym3/image/upload/v1659189696/62e539c0d8b514f6e42e3b5b"
 }
 
-###
+### get all users commented on a post with postId.
 GET {{baseUrl}}/{{urlPath}}/post/commentsnames/62ea82366d7191261d4ff0de
 Content-Type: application/json
 Accept: application/json
 withCredentials: true
 
-###
+### get a single comment with commentId and postId.
 GET {{baseUrl}}/{{urlPath}}/post/single/comment/62ea82366d7191261d4ff0de/62ed50ada897780b7597ead7
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
+
+### get all comments with postId.
+GET {{baseUrl}}/{{urlPath}}/post/comments/6513146ae3bef33b131eb6f9
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
+
+### delete a comment with  postId and commentId
+DELETE {{baseUrl}}/{{urlPath}}/post/single/comment/6513146ae3bef33b131eb6f9/65131a61e3bef33b131eb71e
 Content-Type: application/json
 Accept: application/json
 withCredentials: true

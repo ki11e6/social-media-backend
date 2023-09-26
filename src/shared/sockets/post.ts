@@ -17,7 +17,7 @@ export class SocketIOPostHandler {
       //from client we get reaction.
       socket.on('reaction', (reaction: IReactionDocument) => {
         //server sends response
-        this.io.emit('update reacion', reaction);
+        this.io.emit('update reaction', reaction);
       });
 
       socket.on('comment', (data: ICommentDocument) => {

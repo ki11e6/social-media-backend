@@ -6,6 +6,7 @@ import { PostModel } from '@post/models/post.schema';
 import { Query } from 'mongoose';
 import { UserCache } from '@service/redis/user.cache';
 import { IUserDocument } from '@user/interfaces/user.interface';
+import { InternalServerError } from '@global/helpers/error-handler';
 
 const userCache: UserCache = new UserCache();
 
@@ -39,20 +40,24 @@ class CommentService {
     return commentsNamesList;
   }
   //remove comment from db
-  public async removeCommentDataFromDB(username: string, query: IQueryComment): Promise<void> {
-    const { postId, _id } = query;
-    await Promise.all([
-      CommentsModel.deleteOne({ _id, postId, username }),
-      PostModel.updateOne(
-        { _id: postId },
-        {
-          $inc: {
-            commentsCount: -1
-          }
-        },
-        { new: true }
-      )
-    ]);
+  public async removeCommentDataFromDB(query: IQueryComment, username: string): Promise<void> {
+    try {
+      const { postId, _id } = query;
+      await Promise.all([
+        CommentsModel.deleteOne({ _id, postId, username }),
+        PostModel.updateOne(
+          { _id: postId },
+          {
+            $inc: {
+              commentsCount: -1
+            }
+          },
+          { new: true }
+        )
+      ]);
+    } catch (error) {
+      throw new InternalServerError('Something went wrong!');
+    }
   }
   //update comment from db
 }
