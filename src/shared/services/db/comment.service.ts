@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ICommentDocument, ICommentJob, ICommentNameList, IQueryComment } from '@comment/interfaces/comment.interface';
 import { CommentsModel } from '@comment/models/comment.schema';
 import { IPostDocument } from '@post/interfaces/post.interface';
@@ -10,8 +11,7 @@ const userCache: UserCache = new UserCache();
 
 class CommentService {
   public async addCommentToDB(commentData: ICommentJob): Promise<void> {
-    const { postId, userTo, comment } = commentData;
-    //Promise type here so can use Promise.all or else could use await.
+    const { postId, userTo, userFrom, comment, username } = commentData;
     const comments: Promise<ICommentDocument> = CommentsModel.create(comment);
     const post: Query<IPostDocument, IPostDocument> = PostModel.findOneAndUpdate(
       { _id: postId },
@@ -19,25 +19,9 @@ class CommentService {
       { new: true }
     ) as Query<IPostDocument, IPostDocument>;
     const user: Promise<IUserDocument> = userCache.getUserFromCache(userTo) as Promise<IUserDocument>;
-    await Promise.all([comments, post, user]);
+    const response: [ICommentDocument, IPostDocument, IUserDocument] = await Promise.all([comments, post, user]);
 
-    //send comment notifications
-  }
-
-  public async removeCommentDataFromDB(username: string, query: IQueryComment): Promise<void> {
-    const { postId, _id } = query;
-    await Promise.all([
-      CommentsModel.deleteOne({ _id, postId, username }),
-      PostModel.updateOne(
-        { _id: postId },
-        {
-          $inc: {
-            commentsCount: -1
-          }
-        },
-        { new: true }
-      )
-    ]);
+    //notifications here
   }
 
   public async getPostComments(query: IQueryComment, sort: Record<string, 1 | -1>): Promise<ICommentDocument[]> {
@@ -54,6 +38,23 @@ class CommentService {
     ]);
     return commentsNamesList;
   }
+  //remove comment from db
+  public async removeCommentDataFromDB(username: string, query: IQueryComment): Promise<void> {
+    const { postId, _id } = query;
+    await Promise.all([
+      CommentsModel.deleteOne({ _id, postId, username }),
+      PostModel.updateOne(
+        { _id: postId },
+        {
+          $inc: {
+            commentsCount: -1
+          }
+        },
+        { new: true }
+      )
+    ]);
+  }
+  //update comment from db
 }
 
 export const commentService: CommentService = new CommentService();
