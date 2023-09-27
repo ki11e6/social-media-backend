@@ -1,0 +1,34 @@
+@baseUrl = http://localhost:5000
+@urlPath = api/v1
+
+### admin get all users
+GET {{baseUrl}}/{{urlPath}}/admin/users
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
+
+### create a new Admin User
+POST {{baseUrl}}/{{urlPath}}/admin/user/promote
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
+
+{
+  "authId":"6513cd9784134e0bc7193771",
+  "uId":"853537426269",
+  "username": "Admin",
+  "email": "admin@example.com",
+  "avatarColor": "black",
+  "profilePicture": "https://res.cloudinary.com/dyamr9ym3/image/upload/v1659189696/62e539c0d8b514f6e42e3b5b"
+}
+
+### block or unblock User
+PUT {{baseUrl}}/{{urlPath}}/admin/user/block
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
+
+{
+  "authId":"65131849e3bef33b131eb70a",
+  "blockedByAdmin":true
+}

@@ -107,6 +107,7 @@
       }
     ],
     "paths": {
+      "@admin/*": ["src/features/admin/*"],
       "@auth/*": ["src/features/auth/*"],
       "@user/*": ["src/features/user/*"],
       "@post/*": ["src/features/post/*"],

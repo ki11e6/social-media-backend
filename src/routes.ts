@@ -1,3 +1,4 @@
+import { adminRoutes } from '@admin/routes/adminRoutes';
 import { authRoutes } from '@auth/routes/authRoutes';
 import { currentUserRoutes } from '@auth/routes/currentRoutes';
 import { commentRoutes } from '@comment/routes/commentRoutes';
@@ -14,6 +15,7 @@ export default (app: Application) => {
     app.use('/queues', serverAdapter.getRouter());
     app.use(BASE_PATH, authRoutes.routes());
     app.use(BASE_PATH, authRoutes.signoutRoute());
+    app.use(BASE_PATH, authMiddleware.verifyUser, adminRoutes.routes());
     app.use(BASE_PATH, authMiddleware.verifyUser, currentUserRoutes.routes());
     app.use(BASE_PATH, authMiddleware.verifyUser, postRoutes.routes());
     app.use(BASE_PATH, authMiddleware.verifyUser, reactionRoutes.routes());
