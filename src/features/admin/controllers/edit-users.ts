@@ -13,10 +13,9 @@ export class Edit {
   }
 
   public async promoteUser(req: Request, res: Response): Promise<void> {
-    const { authId, uId, username, email, avatarColor, profilePicture } = req.body;
+    const { authId, username, email, avatarColor, profilePicture } = req.body;
     const userData: IAdminDocument = {
       authId: new mongoose.Types.ObjectId(authId),
-      uId,
       username: Helpers.firstLetterUppercase(username),
       email: Helpers.lowerCase(email),
       avatarColor,
@@ -26,6 +25,6 @@ export class Edit {
       createdAt: new Date()
     } as IAdminDocument;
     const newAdmin: IAdminDocument = await adminService.promoteToAdmin(userData);
-    res.status(HTTP_STATUS.OK).json({ message: 'New Admin is Created', user: newAdmin });
+    res.status(HTTP_STATUS.OK).json({ message: 'User Role Updated', user: newAdmin });
   }
 }

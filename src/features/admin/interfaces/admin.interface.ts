@@ -4,7 +4,6 @@ import { IAuthDocument } from '@auth/interfaces/auth.interface';
 
 export interface IAdminDocument extends Document {
   authId: string | ObjectId;
-  uId?: string;
   username?: string;
   email?: string;
   avatarColor?: string;

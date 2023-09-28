@@ -30,7 +30,7 @@ class AdminService {
     return {
       _id: 1,
       username: '$authId.username',
-      uId: '$authId.uId',
+      authId: '$authId._id',
       email: '$authId.email',
       avatarColor: '$authId.avatarColor',
       role: '$authId.role',

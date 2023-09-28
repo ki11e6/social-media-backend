@@ -3,7 +3,6 @@ import mongoose, { model, Model, Schema } from 'mongoose';
 
 const adminSchema: Schema = new Schema({
   authId: { type: mongoose.Schema.Types.ObjectId, ref: 'Auth', index: true },
-  uId: { type: String },
   username: { type: String },
   email: { type: String },
   avatarColor: { type: String },

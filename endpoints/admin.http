@@ -15,7 +15,6 @@ withCredentials: true
 
 {
   "authId":"6513cd9784134e0bc7193771",
-  "uId":"853537426269",
   "username": "Admin",
   "email": "admin@example.com",
   "avatarColor": "black",
@@ -30,5 +29,5 @@ withCredentials: true
 
 {
   "authId":"65131849e3bef33b131eb70a",
-  "blockedByAdmin":true
+  "blockedByAdmin":false
 }
