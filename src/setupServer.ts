@@ -15,6 +15,7 @@ import { config } from '@root/config';
 import applicationRoutes from '@root/routes';
 import { CustomError, IErrorResponse } from '@global/helpers/error-handler';
 import { SocketIOPostHandler } from '@socket/post';
+import { SocketIOFollowerHandler } from '@socket/follower';
 
 const SERVER_PORT = 5000;
 const log: Logger = config.createLogger('server');
@@ -115,6 +116,9 @@ export class AppServer {
   //all sockets io connection will be defined here
   private socketIOConnections(io: Server): void {
     const postSocketHandler: SocketIOPostHandler = new SocketIOPostHandler(io);
+    const followerSocketHandler: SocketIOFollowerHandler = new SocketIOFollowerHandler(io);
+
     postSocketHandler.listen();
+    followerSocketHandler.listen();
   }
 }

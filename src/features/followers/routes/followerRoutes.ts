@@ -1,4 +1,6 @@
 import express, { Router } from 'express';
+import { Add } from '@follower/controllers/follower-user';
+import { authMiddleware } from '@global/helpers/auth-middleware';
 
 class FollowerRoutes {
   private router: Router;
@@ -8,6 +10,7 @@ class FollowerRoutes {
   }
 
   public routes(): Router {
+    this.router.put('/user/follow/:followerId', authMiddleware.checkAuthentication, Add.prototype.follower);
     return this.router;
   }
 }
